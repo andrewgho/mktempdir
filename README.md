@@ -1,8 +1,10 @@
 mktempdir.sh - securely create temporary directory
 ==================================================
 
-This repository provides a `mktempdir()` shell function which securely 
-and portably creates a temporary directory.
+This repository provides a `mktempdir()` shell function which securely
+and portably creates a temporary directory. It should work on most
+modern Unix and Unix-like systems, including FreeBSD, OpenBSD, Linux,
+OS X, Cygwin, and MinGW environments.
 
 Synopsis
 --------
@@ -13,7 +15,7 @@ Create a temporary directory, `chdir` to it, and touch a file there:
 tempdir=`mktempdir` && (cd "$tempdir" && touch tempfile)
 ```
 
-Pass a prefix for the directory (the default is to use the basenae of 
+Pass a prefix for the directory (the default is to use the basenae of
 the invoking program):
 
 ```sh
@@ -23,7 +25,7 @@ tempdir=`mktempdir myprefix` && (cd "$tempdir" && touch tempfile)
 Description
 -----------
 
-Many shell scripts create temporary directories by using some 
+Many shell scripts create temporary directories by using some
 combination of program name and PID:
 
 ```sh
@@ -32,31 +34,31 @@ rm -rf "$tempdir"
 mkdir "$tempdir"
 ```
 
-This has several disadvantages, most notably, PIDs can be reused in most 
-systems, and PIDs can also be guessed, raising security concerns for 
-scripts with elevated privileges who create temporary directories this 
-way. The `mktemp` command was created (originally in OpenBSD) to provide 
+This has several disadvantages, most notably, PIDs can be reused in most
+systems, and PIDs can also be guessed, raising security concerns for
+scripts with elevated privileges who create temporary directories this
+way. The `mktemp` command was created (originally in OpenBSD) to provide
 a more general and secure way to create temporary files and directories.
 
-This script provides an interface `mktempdir()` which runs `mktemp` in a 
-manner portable across most environments where shell scripts usually 
-run, using only traditional Bourne shell syntax (no `bash` specific 
-syntax), requiring only generally available `mktemp`, `printf`, and 
-`sed` programs, and passing only widely supported options to those 
+This script provides an interface `mktempdir()` which runs `mktemp` in a
+manner portable across most environments where shell scripts usually
+run, using only traditional Bourne shell syntax (no `bash` specific
+syntax), requiring only generally available `mktemp`, `printf`, and
+`sed` programs, and passing only widely supported options to those
 commands.
 
-Of the prerequisites, `mktemp` is the least generally available, and has 
-the least consistent semantics across platforms. That being said, it is 
-available on FreeBSD (from version 2.2.7), OpenBSD (from version 2.1), 
-and most Linux distributions (usually in a `mktemp` package included in 
-even base or minimal installations). It is also present by default in OS 
+Of the prerequisites, `mktemp` is the least generally available, and has
+the least consistent semantics across platforms. That being said, it is
+available on FreeBSD (from version 2.2.7), OpenBSD (from version 2.1),
+and most Linux distributions (usually in a `mktemp` package included in
+even base or minimal installations). It is also present by default in OS
 X, and available as a package in Cygwin and MinGW installations.
 
-Most `mktemp` variants should accept the `-dqt` options passed by 
-`mktempdir()`, and special care is taken to handle templates with 
-prefixed dashes (at least some older FreeBSD `mktemp` variants treate a 
-template of, for example, `-sh` as an option, die on an unknown option 
-error, and do not use the convention of taking `--` as signifying the 
+Most `mktemp` variants should accept the `-dqt` options passed by
+`mktempdir()`, and special care is taken to handle templates with
+prefixed dashes (at least some older FreeBSD `mktemp` variants treate a
+template of, for example, `-sh` as an option, die on an unknown option
+error, and do not use the convention of taking `--` as signifying the
 end of command line options).
 
 License
@@ -100,3 +102,11 @@ Meta
 * Home: <https://github.com/andrewgho/mktempdir>
 * Bugs: <https://github.com/andrewgho/mktempdir/issues>
 * Author: <https://github.com/andrewgho>
+
+### Prior Art ###
+
+The following links include discussions and similar implementations for
+solving the problem of portably creating temporary directories:
+
+* http://content.hccfl.edu/pollock/ShScript/TempFile.htm
+* http://unix.stackexchange.com/questions/30091/fix-or-alternative-for-mktemp-in-os-x
